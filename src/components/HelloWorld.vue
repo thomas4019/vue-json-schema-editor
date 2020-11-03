@@ -1,40 +1,95 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <Schema :value="schema" />
+
+    {{ schema }}
   </div>
 </template>
 
 <script>
+var productSchema = {
+  "title": "Product",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a product",
+      "type": "number",
+      "links": [
+        {
+          "rel": "Download",
+          "href": "/images/{{self}}"
+        }
+      ]
+    },
+    "name": {
+      "type": "string",
+      "default": "thomas",
+      "description": "test description",
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "default": 5,
+      "exclusiveMinimum": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "length": {"type": "number"},
+        "width": {"type": "number"},
+        "height": {"type": "number"}
+      },
+      "required": ["length", "width", "height"]
+    },
+    "warehouseLocation": {
+      "description": "Coordinates of the warehouse with the product",
+      "$ref": "http://json-schema.org/geo"
+    }
+  },
+  "required": ["id", "name", "price"]
+}
+
+function processSchema(obj) {
+  if (typeof obj === 'object' && !Array.isArray(obj)) {
+    for (const key of Object.keys(obj)) {
+      processSchema(obj[key]);
+    }
+  }
+  if (obj.type && obj.type === 'object' && obj.properties) {
+    obj.properties = Object.entries(obj.properties).map(([key, value]) => ({...value, name: key}))
+    if (typeof obj.additionalProperties === 'undefined') {
+      obj.additionalProperties = false
+    }
+  }
+  return obj;
+}
+
+
+// import SchemaObject from './SchemaObject'
+import Schema from './json-schema-editor'
 export default {
   name: 'HelloWorld',
+  components: {
+//    SchemaObject,
+    Schema,
+  },
   props: {
     msg: String
+  },
+  data() {
+    return {
+      rows: ["a", "b", "c"],
+      schema: processSchema(productSchema)
+    }
   }
 }
 </script>

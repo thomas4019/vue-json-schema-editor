@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+      <script src="https://unpkg.com/vue@2.6.11"></script>
+      <script src="../dist/json-schema-editor.min.js"></script>
+      <link rel="stylesheet" href="../dist/json-schema-editor.min.css">
+  </head>
+  <body>
+    <h1>JSON Schema Editor Example</h1>
+    <div id="example"></div>
+    <div id="app">
+        <json-schema-editor :value="value" />
+    </div>
+    <br>
+    <button onclick="print()">Print Schema</button>
+    <button onclick="update()">Update</button>
+
+    <script>
+        var product = {
+            "title": "Product",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The unique identifier for a product",
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "thomas",
+                    "description": "test description",
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 0,
+                    "default": 5,
+                    "exclusiveMinimum": true
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                },
+                "dimensions": {
+                    "type": "object",
+                    "properties": {
+                        "length": {"type": "number"},
+                        "width": {"type": "number"},
+                        "height": {"type": "number"}
+                    },
+                    "required": ["length", "width", "height"]
+                },
+                "warehouseLocation": {
+                    "description": "Coordinates of the warehouse with the product",
+                    "$ref": "http://json-schema.org/geo"
+                }
+            },
+            "required": ["id", "name", "price"]
+        }
+
+        var element = document.getElementById('example');
+
+        function processSchema(obj) {
+            if (typeof obj === 'object' && !Array.isArray(obj)) {
+                for (const key of Object.keys(obj)) {
+                    processSchema(obj[key]);
+                }
+            }
+            if (obj.type && obj.type === 'object' && obj.properties) {
+                obj.properties = Object.entries(obj.properties).map(([key, value]) => ({...value, name: key}))
+                if (typeof obj.additionalProperties === 'undefined') {
+                    obj.additionalProperties = false
+                }
+            }
+            return obj;
+        }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                value: processSchema(JSON.parse(JSON.stringify(product)))
+            }
+        })
+
+        //expose the editor so we can access it later
+        window.app = app;
+
+        function print() {
+            console.log(JSON.parse(JSON.stringify(app.value)));
+        }
+
+        function update() {
+            Vue.set(app, 'value', processSchema(JSON.parse(JSON.stringify(product))));
+        }
+    </script>
+
+  </body>
+</html>
