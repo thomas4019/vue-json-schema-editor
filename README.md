@@ -25,5 +25,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### TODO
 * String enums
-* Stripping empty strings
+* Stripping empty strings - especially for numbers
 * Remove required fields when removing a field
+
+### Testing component
+* python -m SimpleHTTPServer
+* open http://localhost:8000/examples/index.html

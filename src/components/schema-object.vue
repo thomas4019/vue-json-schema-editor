@@ -45,12 +45,19 @@ export default {
     selectType(svalue, type) {
       if (type === 'array') {
         Vue.set(svalue, 'items', svalue.items || {})
+      } else {
+        Vue.delete(svalue, 'items')
       }
+
       if (type === 'object') {
         Vue.set(svalue, 'properties', svalue.properties || [])
         Vue.set(svalue, 'required', svalue.required || [])
+      } else {
+        Vue.delete(svalue, 'properties')
+        Vue.delete(svalue, 'required')
       }
-      svalue.type = type
+
+      Vue.set(svalue, 'type', type)
     },
     updateKey(svalue, newKey) {
       const oldKey = svalue.name
@@ -76,6 +83,7 @@ export default {
       this.value.properties.push({});
     },
     deleteItem(index) {
+      this.toggleRequired(this.value.required[index]);
       this.value.properties.splice(index, 1);
       // Vue.delete(this.properties, index)
     }

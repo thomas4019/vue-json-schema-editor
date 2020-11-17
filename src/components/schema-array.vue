@@ -4,8 +4,8 @@
     <select name="itemtype" v-model="value.items.type" @input="selectType($event.target.value)">
       <option v-for="type in types" :value="type" :key="type">{{type}}</option>
     </select>
-    minItems: <input class="short-num" name="minimum" type="number" v-model.number="value.minimum" />
-    maxItems: <input class="short-num" name="maximum" type="number" v-model.number="value.maximum" />
+    minItems: <input class="short-num" name="minItems" type="number" v-model.number="value.minItems" />
+    maxItems: <input class="short-num" name="maxItems" type="number" v-model.number="value.maxItems" />
     uniqueItems: <input name="uniqueItems" type="checkbox" v-model="value.uniqueItems" />
     Format:
     <select name="format" v-model="value.format">

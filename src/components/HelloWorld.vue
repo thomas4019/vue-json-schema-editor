@@ -3,13 +3,12 @@
     <h1>{{ msg }}</h1>
     <Schema :value="schema" />
 
-    {{ schema }}
+    {{ objectifySchema(schema) }}
   </div>
 </template>
 
 <script>
 var productSchema = {
-  "title": "Product",
   "type": "object",
   "properties": {
     "id": {
@@ -58,37 +57,25 @@ var productSchema = {
   "required": ["id", "name", "price"]
 }
 
-function processSchema(obj) {
-  if (typeof obj === 'object' && !Array.isArray(obj)) {
-    for (const key of Object.keys(obj)) {
-      processSchema(obj[key]);
-    }
-  }
-  if (obj.type && obj.type === 'object' && obj.properties) {
-    obj.properties = Object.entries(obj.properties).map(([key, value]) => ({...value, name: key}))
-    if (typeof obj.additionalProperties === 'undefined') {
-      obj.additionalProperties = false
-    }
-  }
-  return obj;
-}
-
-
-// import SchemaObject from './SchemaObject'
 import Schema from './json-schema-editor'
+import { arrayifySchema, objectifySchema } from '../util'
 export default {
   name: 'HelloWorld',
   components: {
-//    SchemaObject,
     Schema,
   },
   props: {
     msg: String
   },
+  methods: {
+    objectifySchema(obj) {
+      return objectifySchema(obj)
+    }
+  },
   data() {
     return {
       rows: ["a", "b", "c"],
-      schema: processSchema(productSchema)
+      schema: arrayifySchema(productSchema)
     }
   }
 }
