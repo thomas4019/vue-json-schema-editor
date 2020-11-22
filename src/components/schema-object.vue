@@ -28,6 +28,7 @@
 
 <script>
 import Vue from 'vue'
+import { setupType } from '../util'
 
 export default {
   name: 'schema-object',
@@ -43,21 +44,7 @@ export default {
   },
   methods: {
     selectType(svalue, type) {
-      if (type === 'array') {
-        Vue.set(svalue, 'items', svalue.items || {})
-      } else {
-        Vue.delete(svalue, 'items')
-      }
-
-      if (type === 'object') {
-        Vue.set(svalue, 'properties', svalue.properties || [])
-        Vue.set(svalue, 'required', svalue.required || [])
-      } else {
-        Vue.delete(svalue, 'properties')
-        Vue.delete(svalue, 'required')
-      }
-
-      Vue.set(svalue, 'type', type)
+      setupType(Vue, svalue, type)
     },
     updateKey(svalue, newKey) {
       const oldKey = svalue.name

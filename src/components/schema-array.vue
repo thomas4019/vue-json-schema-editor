@@ -19,6 +19,7 @@
 
 <script>
 import Vue from 'vue'
+import { setupType } from '../util'
 
 export default {
   name: 'schema-array',
@@ -30,14 +31,7 @@ export default {
   },
   methods: {
     selectType(type) {
-      if (type === 'array') {
-        Vue.set(this.value.items, 'items', this.value.items.items || {})
-      }
-      if (type === 'object') {
-        Vue.set(this.value.items, 'properties', this.value.items.properties || [])
-        Vue.set(this.value.items, 'required', this.value.items.required || [])
-      }
-      this.value.items.type = type
+      setupType(Vue, this.value.items, type)
     }
   },
   data() {
