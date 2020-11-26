@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      types: ['string', 'number', 'array', 'object', 'boolean'],
+      types: util.getTypes(),
       formats: ['', 'table', 'checkbox', 'select', 'tabs'],
     }
   },

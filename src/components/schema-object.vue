@@ -8,7 +8,7 @@
       </select>
       <input class="description" placeholder="description" name="description" type="text" v-model="svalue.description"/>
       <span class="required-icon">*</span>
-      <input name="name" v-bind:checked="value.required.includes(svalue.name)" @input="toggleRequired(svalue.name, $event.target.checked)" type="checkbox"/>
+      <input name="name" v-bind:checked="(value.required || []).includes(svalue.name)" @input="toggleRequired(svalue.name, $event.target.checked)" type="checkbox"/>
       <span @click="deleteItem(index)" class="delete-prop">x</span>
       <div class="option-form">
         <json-schema-editor :value="svalue" />
@@ -28,7 +28,7 @@
 
 <script>
 import Vue from 'vue'
-import { setupType } from '../util'
+import { setupType, getTypes } from '../util'
 
 export default {
   name: 'schema-object',
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       //properties: Object.entries(this.value.properties).map(([key, value]) => ({ ...value, name: key }))
-      types: ['string', 'number', 'array', 'object', 'boolean'],
+      types: getTypes(),
       formats: ['', 'grid', 'schema'],
     }
   },

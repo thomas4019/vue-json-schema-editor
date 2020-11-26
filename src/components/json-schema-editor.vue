@@ -2,7 +2,7 @@
   <div class="option-form">
     <SchemaObject v-if="value.type == 'object'" :value="value"/>
     <SchemaString v-if="value.type == 'string'" :value="value"/>
-    <SchemaNumber v-if="value.type == 'number'" :value="value"/>
+    <SchemaNumber v-if="value.type == 'number' || value.type == 'integer'" :value="value"/>
     <SchemaArray v-if="value.type == 'array'" :value="value"/>
   </div>
 </template>

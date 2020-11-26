@@ -52,11 +52,14 @@ export function objectifySchema(obj2) {
     if (obj.type === 'string') {
         cleanKeys(obj, ['format'])
     }
-    if (obj.type === 'number') {
+    if (obj.type === 'number' || obj.type === 'integer') {
         cleanKeys(obj, ['minimum', 'maximum'])
     }
     if (obj.type === 'array') {
         cleanKeys(obj, ['minItems', 'maxItems'])
+    }
+    if (obj.type === 'object') {
+        cleanKeys(obj, ['format'])
     }
     if (typeof obj === 'object' && !Array.isArray(obj)) {
         Object.keys(obj).forEach((key) => {
@@ -64,4 +67,8 @@ export function objectifySchema(obj2) {
         });
     }
     return obj;
+}
+
+export function getTypes() {
+    return ['string', 'integer', 'number', 'array', 'object', 'boolean'];
 }
