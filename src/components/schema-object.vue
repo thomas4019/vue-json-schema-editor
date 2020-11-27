@@ -66,11 +66,15 @@ export default {
       }
     },
     add() {
-      // Vue.set(this.properties, '', {})
+      if (!this.value.properties) {
+        Vue.set(this.value, 'properties', [])
+      }
       this.value.properties.push({});
     },
     deleteItem(index) {
-      this.toggleRequired(this.value.required[index]);
+      if (this.value.required) {
+        this.toggleRequired(this.value.required[index]);
+      }
       this.value.properties.splice(index, 1);
       // Vue.delete(this.properties, index)
     }

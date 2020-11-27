@@ -45,6 +45,7 @@ export function objectifySchema(obj2) {
         obj.properties = Object.fromEntries(obj.properties
                                                 .filter(value => value.name)
                                                 .map((value) => {
+                                                    // eslint-disable-next-line no-unused-vars
                                                     const { name, ...withoutName } = value
                                                     return [value.name, withoutName]
                                                 }))

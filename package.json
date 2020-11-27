@@ -1,11 +1,11 @@
 {
   "name": "vue-json-schema-editor",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build-demo": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "fixlint": "vue-cli-service lint --fix",
     "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
     "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/json-schema-editor.umd.js",
     "build:es": "rollup --config build/rollup.config.js --format es --file dist/json-schema-editor.esm.js",

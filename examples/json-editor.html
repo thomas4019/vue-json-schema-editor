@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://unpkg.com/vue@2.6.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@1.3.5/dist/jsoneditor.min.js"></script>
+    <script src="../dist/json-schema-editor.min.js"></script>
+    <link rel="stylesheet" href="../dist/json-schema-editor.min.css">
+    <style>
+        body {
+            padding: 5px 20px 10px 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 36px;
+            font-weight: 500;
+        }
+
+        #main {
+            margin-top: 30px;
+            display: flex;
+            height: 800px;
+        }
+
+        #schema {
+            flex: 2;
+        }
+
+        #ui {
+            flex: 3;
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body>
+<h1>JSON Schema Editor</h1>
+<h3>(embedded in JSON Editor)</h3>
+<div id="main">
+    <div id="ui">
+    </div>
+</div>
+
+<script>
+    var product = {
+        "title": "Product",
+        "type": "object",
+        "properties": {
+            "id": {
+                "description": "The unique identifier for a product",
+                "type": "number"
+            },
+            "name": {
+                "type": "string",
+                "default": "thomas",
+                "description": "test description",
+            },
+            "price": {
+                "type": "number",
+                "minimum": 0,
+                "default": 5,
+                "exclusiveMinimum": true
+            },
+            "tags": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+            },
+            "dimensions": {
+                "type": "object",
+                "properties": {
+                    "length": {"type": "number"},
+                    "width": {"type": "number"},
+                    "height": {"type": "number"}
+                },
+                "required": ["length", "width", "height"]
+            },
+            "warehouseLocation": {
+                "description": "Coordinates of the warehouse with the product",
+                "$ref": "http://json-schema.org/geo"
+            }
+        },
+        "required": ["id", "name", "price"]
+    }
+
+    var collection_schema = {
+        "title": "Product",
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "schema": {
+                "type": "object",
+                "format": "schema",
+            }
+        }
+    }
+
+    const element = document.getElementById('ui');
+
+    const options = {
+        schema: collection_schema
+    }
+    const editor = new JSONEditor(element, options);
+    editor.setValue({
+        schema: product
+    })
+</script>
+
+</body>
+</html>

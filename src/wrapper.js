@@ -1,5 +1,6 @@
 // Import vue component
 import component from './components/json-schema-editor.vue';
+import './json-editor-plugin.js';
 import { arrayifySchema, objectifySchema } from './util'
 
 // Declare install function executed by Vue.use()

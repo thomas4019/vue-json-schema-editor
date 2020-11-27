@@ -19,7 +19,7 @@
 
 <script>
 import Vue from 'vue'
-import { setupType } from '../util'
+import { setupType, getTypes } from '../util'
 
 export default {
   name: 'schema-array',
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      types: util.getTypes(),
+      types: getTypes(),
       formats: ['', 'table', 'checkbox', 'select', 'tabs'],
     }
   },
